@@ -80,4 +80,3 @@ Disconnect running container from a network: `$ docker network disconnect my-bri
 Delete network: `docker network rm my_bridge_network`   
 
 
-
