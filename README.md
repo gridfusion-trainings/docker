@@ -60,10 +60,22 @@ Stop and remove container:
     gf_container1
 
 # Networking
-Find out which network a container is attached to
-
-`docker inspect containername`
-
+Find out which network a container is attached to: `docker inspect containername`   
 **bridged** is always the standard network a container attaches to   
-To create a new network: `docker create network **networkname**`
+
+To create a new network: `$ docker network create -d bridge my-bridge-network`   
+
+    $ docker network ls
+    NETWORK ID          NAME                DRIVER
+    7b369448dccb        bridge              bridge              
+    615d565d498c        my-bridge-network   bridge              
+    18a2866682b8        none                null                
+    c288470c46f6        host                host
+    
+Start and add a container to a specific network: `$ docker run -d --net=my-bridge-network --name node1 training/web`   
+Start a shell on a running container: `$ docker exec -it node1 bash`   
+
+Connect container to a specific network (while it is running): `$ docker network connect my-bridge-network node1`
+Disconnect running container from a network: `$ docker network disconnect my-bridge-network node1`   
+
 
