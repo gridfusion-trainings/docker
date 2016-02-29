@@ -76,6 +76,8 @@ Start and add a container to a specific network: `$ docker run -d --net=my-bridg
 Start a shell on a running container: `$ docker exec -it node1 bash`   
 
 Connect container to a specific network (while it is running): `$ docker network connect my-bridge-network node1`
-Disconnect running container from a network: `$ docker network disconnect my-bridge-network node1`   
+Disconnect running container from a network: `$ docker network disconnect my-bridge-network node1`  
+Delete network: `docker network rm my_bridge_network`   
+
 
 
