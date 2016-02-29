@@ -48,3 +48,22 @@ Build new docker image: `$ docker build -t palotas/sinatra:v2 .`
 make sure you are logged in: `docker login`
 
 `$ docker push palotas/sinatra`
+
+## Name a container
+`$ docker run -d -P --name gf_container1 training/webapp python app.py`
+
+Stop and remove container:
+
+    $ docker stop web
+    gf_container1
+    $ docker rm web
+    gf_container1
+
+# Networking
+Find out which network a container is attached to
+
+`docker inspect containername`
+
+**bridged** is always the standard network a container attaches to   
+To create a new network: `docker create network **networkname**`
+
