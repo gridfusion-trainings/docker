@@ -1,7 +1,10 @@
-# docker
+# DOCKER
 
-## Docker Ubuntu 
 Run interactive container: `docker run ubuntu /bin/echo 'Hello world'`
+
+List running docker containers: `docker ps`   
+List all docker containers: `docker ps -a`   
+Remove all docker container (incl. not running ones): `docker rm $(docker ps -aq)`   
 
 ## Docker run container as a daemon 
 `docker run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done" <br>`
@@ -32,7 +35,7 @@ Commit the changes: `$ docker commit -m "Added json gem" -a "Kate Smith" 0b2616b
 
 When running `docker images` you should see the `palotas/sinatra:v2` image
 
-Run the new image: `$ docker run -t -i palotas/sinatra:v2 /bin/bash`
+Run the new image (creates a new container): `$ docker run -t -i palotas/sinatra:v2 /bin/bash`
 
 ## Create new image with DOCKERFILE
     # This is a comment
@@ -79,5 +82,33 @@ Connect container to a specific network (while it is running): `$ docker network
 Disconnect running container from a network: `$ docker network disconnect my-bridge-network node1`  
 Delete network: `docker network rm my_bridge_network`   
 
+## File System 
+Create a new data volume in a container: `docker run -d -P --name web -v /webapp training/webapp python app.py`   
+A new container is created and started from the *training/webapp* image and a new data volume is created at */webapp*. The corresponding data on the host can be found with `docker inspect web`   
 
+     Mounts": [
+     {
+        "Name": "fac362...80535",
+        "Source": "/var/lib/docker/volumes/fac362...80535/_data",
+        "Destination": "/webapp",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+     }
+     ]
+     ...
+     
+### Mount a host directory as a data volume
+`docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py`   
+This mounts the host directory */src/webapp* to */opt/webapp* on the newly created container *web*   
 
+### OR Create a data volume container and use it as a base for new containers 
+1. Create new data volume container: `docker create -v /dbdata --name dbstore training/webapp /bin/true`   
+Creates a new data volume container called */dbdata* in the new container *dbstore* with *training/webapp* as a base
+
+2. Mount the data volume container into a newly created container: `docker run -d --volumes-from dbstore --name db1 training/webapp`   
+Creates a new container *db1* using *training/webapp* as a base image and mounts the */dbdata* volume from the *dbstore* data volume container into it.    
+Now additional containers can be created with the same command just replacing *db1* with something else. 
+
+     Currently I don't understand why the inheriting data container is allowed to make changes in the base container. I expect that the base container has persistent data as explained in http://www.computerweekly.com/feature/Docker-storage-101-How-storage-works-in-Docker. Currently checking this with Francois.    
