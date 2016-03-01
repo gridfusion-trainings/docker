@@ -79,4 +79,19 @@ Connect container to a specific network (while it is running): `$ docker network
 Disconnect running container from a network: `$ docker network disconnect my-bridge-network node1`  
 Delete network: `docker network rm my_bridge_network`   
 
+## File System 
+Create a new data volume in a container: `docker run -d -P --name web -v /webapp training/webapp python app.py`   
+A new container is created and started from the *training/webapp* image and a new data volume is created at */webapp*. The corresponding data on the host can be found with `docker inspect web`   
 
+     Mounts": [
+     {
+        "Name": "fac362...80535",
+        "Source": "/var/lib/docker/volumes/fac362...80535/_data",
+        "Destination": "/webapp",
+        "Driver": "local",
+        "Mode": "",
+        "RW": true,
+        "Propagation": ""
+     }
+     ]
+     ...
