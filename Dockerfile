@@ -1,5 +1,5 @@
 # This is a comment
-FROM boot2docker
+FROM ubuntu:15.04
 MAINTAINER Michael Palotas <michael.palotas@gridfusion.net>
 RUN apt-get update && apt-get install -y ruby ruby-dev
 RUN gem install sinatra
