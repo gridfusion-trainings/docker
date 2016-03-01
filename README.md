@@ -95,3 +95,16 @@ A new container is created and started from the *training/webapp* image and a n
      }
      ]
      ...
+     
+### Mount a host directory as a data volume
+`docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py`   
+This mounts the host directory */src/webapp* to */opt/webapp* on the newly created container *web*   
+
+### Create a data volume container and use it as a base for new containers 
+1. Create new data volume container: `docker create -v /dbdata --name dbstore training/webapp /bin/true`   
+Creates a new data volume container called */dbdata* in the new container *dbstore* with *training/webapp* as a base
+
+2. Mount the data volume container into a newly created container: `docker run -d --volumes-from dbstore --name db1 training/webapp`   
+Creates a new container *db1* with *training/webapp* as a base image and mounts the */dbdata* volume from the *dbstore* data volume container into it.    
+Now additional containers can be created with the same command just replacing *db1* with something else. 
+
